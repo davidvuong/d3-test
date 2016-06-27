@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://d3js.org/d3.v4.0.0-rc.2.js"></script>
+  <style>
+    .chart rect {
+      fill: steelblue;
+    }
+
+    .chart text {
+      fill: white;
+      font: 10px sans-serif;
+      text-anchor: end;
+    }
+  </style>
+</head>
+<body>
+  <svg class="chart"></svg>
+  <script>
+    var width = 420;
+    var barHeight = 20;
+
+    var xScale = d3.scaleLinear()
+      .range([0, width]);
+    var chart = d3.select('.chart')
+      .attr('width', width);
+
+    d3.json('http://localhost:8000/test_3.json', function (data_) {
+      var data = data_.data;
+
+      // Update xScale fn and chart with domain and height attr.
+      xScale.domain([0, d3.max(data)]);
+      chart.attr('height', barHeight * data.length);
+
+      var bar = chart.selectAll('g')
+        .data(data)
+        .enter()
+        .append('g')
+        .attr('transform', function (d, i) {
+          return 'translate(0,' + i * barHeight + ')';
+        });
+
+      bar.append('rect')
+        .attr('width', xScale)
+        .attr('height', barHeight - 1);
+      bar.append('text')
+        // -1 is to add a bit of padding on the right side of the bar.
+        .attr('x', function (d) { return xScale(d) - 1; })
+        .attr('y', barHeight / 2)
+        .attr('dy', '.35em')
+        .text(function (d) { return d; });
+    });
+  </script>
+</body>
+</html>

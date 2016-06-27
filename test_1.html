@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://d3js.org/d3.v4.0.0-rc.2.js"></script>
+
+  <style>
+    .chart div {
+      font: 10px sans-serif;
+      background-color: steelblue;
+      text-align: right;
+      padding: 3px;
+      margin: 1px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="chart"></div>
+  <script>
+    var data = [1, 2, 3, 4, 5, 6, 8, 10, 15, 12, 19, 42, 28, 19, 55];
+
+    var xScale = d3.scaleLinear()
+      .domain([0, d3.max(data)])
+      .range([0, 420]);
+
+    d3.select('.chart')
+      .selectAll('div')
+      .data(data)
+      .enter()
+      .append('div')
+      .style('width', function (d) { return xScale(d) + 'px'; })
+      .text(function (d) { return d; });
+  </script>
+</body>
+</html>
